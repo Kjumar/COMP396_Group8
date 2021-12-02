@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
     {
         SetLockMouse(true);
         rb = GetComponent<Rigidbody>();
+
+        // see InGameHUDController
+        FindObjectOfType<BuildHUDController>().SetMainPlayer(this);
     }
 
     // Update is called once per frame
@@ -88,5 +91,10 @@ public class PlayerController : MonoBehaviour
             Cursor.visible = true;
             isMouseLocked = false;
         }
+    }
+
+    public Vector3 GetCameraLookAt()
+    {
+        return firstPersonCamera.transform.forward;
     }
 }
