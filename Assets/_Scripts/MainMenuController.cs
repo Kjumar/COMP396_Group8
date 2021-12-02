@@ -17,7 +17,7 @@ public class MainMenuController : MonoBehaviour
     // button functions
     public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        SceneManager.LoadScene(sceneName);
     }
 
     public void OpenSingleplayerMenu()

@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Camera Controls")]
     [SerializeField] Transform firstPersonCamera;
     [SerializeField] Vector2 mouseSensitivity;
 
+    [Header("Player Mobility")]
     [SerializeField] float jumpForce;
     [SerializeField] float speed;
+
+    [Header("Ground check")]
+    [SerializeField] Transform groundCheckPos;
+    [SerializeField] float groundCheckRadius;
+    [SerializeField] LayerMask groundCheckMask;
 
     private Vector2 rotation;
     private bool isMouseLocked = false;
@@ -54,7 +61,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             // jump
-            rb.AddForce(new Vector3(0, jumpForce, 0));
+            if (Physics.CheckSphere(groundCheckPos.position, groundCheckRadius, groundCheckMask))
+            {
+                rb.AddForce(new Vector3(0, jumpForce, 0));
+            }
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
