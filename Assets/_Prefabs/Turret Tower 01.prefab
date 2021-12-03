@@ -63,7 +63,7 @@ MonoBehaviour:
   range: 9
   targetLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 256
   cannonHead: {fileID: 969633920376512763}
 --- !u!114 &-2274132180193839732
 MonoBehaviour:
