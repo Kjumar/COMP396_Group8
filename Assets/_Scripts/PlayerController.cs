@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float groundCheckRadius;
     [SerializeField] LayerMask groundCheckMask;
 
+    [Header("Misc")]
+    [SerializeField] Transform spawnPoint;
+
     private Vector2 rotation;
     private bool isMouseLocked = false;
     private Rigidbody rb;
@@ -90,6 +93,15 @@ public class PlayerController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             isMouseLocked = false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.gameObject.CompareTag("DeathPlane"))
+        {
+            // respawn the player
+            transform.position = spawnPoint.position;
         }
     }
 
