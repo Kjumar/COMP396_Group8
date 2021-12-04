@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // the game controller manages spawning waves, as well as the timer between waves
 
@@ -10,13 +11,16 @@ public class GameController : MonoBehaviour
     {
         BeginningPhase,
         PlanningPhase,
-        WavePhase
+        WavePhase,
+        PlayerWin,
+        PlayerLose
     }
 
     private LevelPhase currentPhase = LevelPhase.BeginningPhase;
 
     [SerializeField] int maxWaves = 10;
-    [SerializeField] float timeBetweenWaves = 60f;
+    [SerializeField] float timeBetweenWaves = 20f;
+    [SerializeField] Text overheadTextUI;
     private float timeToNextWave = 0;
 
     // the spawning strategy I'm using:
@@ -33,11 +37,12 @@ public class GameController : MonoBehaviour
     [SerializeField] int[] spawningCost;
 
     [SerializeField] int initialBudget = 100;
-    [SerializeField] float linearScale = 10;
-    [SerializeField] float multiplicativeScale = 1.5f;
+    [SerializeField] int linearScale = 10; // flat amount added to budget each round
+    [SerializeField] float multiplicativeScale = 1.5f; // multiply budget by this factor each round
     [SerializeField] float spawnFrequency = 1f; //spawns per second
     private float spawnCooldown = 0;
-    [SerializeField] float bigEnemyBoostFactor = 1.1f; // this value skews the spawning formula to choose larger enemies more frequently
+    [SerializeField] float bigEnemyBoostFactor = 1f; // this value skews the spawning formula to choose larger enemies more frequently
+    [SerializeField] float boostFactorScaling = 0.05f; // increase to the boost faster after each wave
 
     [SerializeField] EnemySpawnZone[] spawnZones;
 
@@ -87,26 +92,33 @@ public class GameController : MonoBehaviour
 
     private void HandleBeginningPhase()
     {
+        overheadTextUI.text = "PRESS R TO START";
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             currentBudget = initialBudget;
             currentWave = 1;
             currentPhase = LevelPhase.WavePhase;
+            overheadTextUI.text = "WAVE " + currentWave + " / " + maxWaves;
         }
     }
 
     private void HandlePlanningPhase()
     {
         timeToNextWave -= Time.deltaTime;
-        
+        overheadTextUI.text = "NEXT WAVE IN\n" + (int)timeToNextWave;
+
         if (timeToNextWave <= 0)
         {
             // scale the budget
-
+            initialBudget += linearScale;
+            initialBudget = (int)(initialBudget * multiplicativeScale);
+            bigEnemyBoostFactor += boostFactorScaling;
 
             currentBudget = initialBudget;
-            currentWave = 1;
+            currentWave++;
             currentPhase = LevelPhase.WavePhase;
+            overheadTextUI.text = "WAVE " + currentWave + " / " + maxWaves;
         }
     }
 
