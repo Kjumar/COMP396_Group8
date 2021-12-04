@@ -2,19 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoximonController : MonoBehaviour, Pathable
+public class BoximonController : MonoBehaviour, IPathable, IDamageable
 {
-    [SerializeField] int health = 100;
+    [SerializeField] int health = 10;
     [SerializeField] float speed = 4;
     [SerializeField] float turnSpeedRad = 8;
+    [SerializeField] float attackRange = 1;
+    [SerializeField] int attackPower = 5;
 
     private Transform[] wayPoints;
     private int currentPoint = 0;
 
+    private Animator anim;
+    private DefensePoint target;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
+        anim.SetFloat("Speed", speed);
+        StartAttack smScript = anim.GetBehaviour<StartAttack>();
+        smScript.controller = this;
     }
 
     // Update is called once per frame
@@ -28,6 +36,22 @@ public class BoximonController : MonoBehaviour, Pathable
             {
                 currentPoint += 1;
             }
+        }
+        else if (target != null)
+        {
+            if (Vector3.Distance(transform.position, target.transform.position) < attackRange)
+            {
+                anim.SetTrigger("Attack 01");
+                anim.SetFloat("Speed", 0);
+            }
+            else
+            {
+                MoveTowards(target.transform.position);
+            }
+        }
+        else
+        {
+            target = DefensePoint.GetInstance();
         }
     }
 
@@ -45,5 +69,23 @@ public class BoximonController : MonoBehaviour, Pathable
     public void SetPath(Transform[] wayPoints)
     {
         this.wayPoints = wayPoints;
+    }
+
+    // AttackTarget gets called by the animator script whenever the attack animation starts
+    // to trigger this function, use anim.SetTrigger("Attack 01")
+    public void AttackTarget()
+    {
+        target.TakeDamage(attackPower);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            // notify the gamecontroller that an enemy died, then destroy the enemy
+            GameController.GetInstance().activeEnemies--;
+            Destroy(gameObject);
+        }
     }
 }

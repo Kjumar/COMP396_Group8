@@ -50,8 +50,8 @@ public class PlayerController : MonoBehaviour
             firstPersonCamera.localRotation = Quaternion.Euler(rotation.y, 0, 0);
             transform.localRotation = Quaternion.Euler(0, rotation.x, 0);
 
-            // below is player movement
-            Vector2 playerMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * speed * Time.deltaTime;
+            // manual player movement
+            Vector2 playerMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * speed * Time.deltaTime;
             transform.position = transform.position
                 + (transform.right * playerMove.x)
                 + (transform.forward * playerMove.y);

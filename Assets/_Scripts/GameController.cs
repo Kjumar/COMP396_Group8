@@ -44,12 +44,26 @@ public class GameController : MonoBehaviour
     private int currentWave = 0;
     private int currentBudget = 100;
 
-    public static int activeEnemies = 0;
+    // singleton behavior
+    private static GameController instance;
+    public int activeEnemies = 0;
+
+    public static GameController GetInstance()
+    {
+        return instance;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     // Update is called once per frame

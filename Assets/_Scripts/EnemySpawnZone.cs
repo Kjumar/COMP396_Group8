@@ -18,7 +18,7 @@ public class EnemySpawnZone : MonoBehaviour
         GameObject newGO = Instantiate(prefab, transform.position + new Vector3(x, 0, z), Quaternion.identity);
 
         // set path if Pathable
-        Pathable p = newGO.GetComponent<Pathable>();
+        IPathable p = newGO.GetComponent<IPathable>();
         if (p != null)
         {
             p.SetPath(path);

@@ -8,6 +8,12 @@ public class TowerController : MonoBehaviour
     [SerializeField] LayerMask targetLayer;
     [SerializeField] Transform cannonHead;
 
+    [SerializeField] Transform bulletSpawnPoint;
+    [SerializeField] GameObject bulletPrefab;
+    [SerializeField] float attackSpeed = 1; // attacks per second
+    private float attackTimer;
+
+
     Transform target = null;
 
     // Start is called before the first frame update
@@ -22,6 +28,23 @@ public class TowerController : MonoBehaviour
         if (target != null)
         {
             RotateCannon(target.position);
+
+            if (attackTimer <= 0)
+            {
+                attackTimer = attackSpeed;
+
+                GameObject projectile = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+                ITargetter targetter = projectile.GetComponent<ITargetter>();
+
+                if (targetter != null)
+                {
+                    targetter.SetTarget(target.gameObject);
+                }
+            }
+            else
+            {
+                attackTimer -= Time.deltaTime;
+            }
         }
     }
 

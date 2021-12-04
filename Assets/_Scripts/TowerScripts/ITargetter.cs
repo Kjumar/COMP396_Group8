@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Pathable
+public interface ITargetter
 {
-    public void SetPath(Transform[] wayPoints);
+    public void SetTarget(GameObject target);
 }
