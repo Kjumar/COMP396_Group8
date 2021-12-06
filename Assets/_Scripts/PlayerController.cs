@@ -17,8 +17,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float groundCheckRadius;
     [SerializeField] LayerMask groundCheckMask;
 
+    [Header("Misc")]
+    [SerializeField] Transform spawnPoint;
+
     private Vector2 rotation;
-    private bool isMouseLocked = false;
     private Rigidbody rb;
 
     // Start is called before the first frame update
@@ -34,7 +36,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isMouseLocked)
+        if (Cursor.lockState == CursorLockMode.Locked)
         {
             // when mouse is locked, read mouse movement and rotate the player and camera
             Vector2 mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * mouseSensitivity;
@@ -47,18 +49,11 @@ public class PlayerController : MonoBehaviour
             firstPersonCamera.localRotation = Quaternion.Euler(rotation.y, 0, 0);
             transform.localRotation = Quaternion.Euler(0, rotation.x, 0);
 
-            // below is player movement
-            Vector2 playerMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * speed * Time.deltaTime;
+            // manual player movement
+            Vector2 playerMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * speed * Time.deltaTime;
             transform.position = transform.position
                 + (transform.right * playerMove.x)
                 + (transform.forward * playerMove.y);
-        }
-        else
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                SetLockMouse(true);
-            }
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -82,14 +77,21 @@ public class PlayerController : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            isMouseLocked = true;
             return;
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            isMouseLocked = false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.gameObject.CompareTag("DeathPlane"))
+        {
+            // respawn the player
+            transform.position = spawnPoint.position;
         }
     }
 

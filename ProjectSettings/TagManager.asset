@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - TowerNode
+  - DeathPlane
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -15,8 +17,8 @@ TagManager:
   - TowerNode
   - Player
   - Enemy
-  - 
-  - 
+  - PlayerWall
+  - PlayerProjectile
   - 
   - 
   - 
