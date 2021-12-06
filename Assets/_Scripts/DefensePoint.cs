@@ -10,6 +10,7 @@ public class DefensePoint : MonoBehaviour
 
     [SerializeField] private int health = 100;
     [SerializeField] UIHealthBar healthBar;
+    [SerializeField] GameObject gameOverScreen;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class DefensePoint : MonoBehaviour
         {
             Destroy(this);
         }
+        gameOverScreen.SetActive(false);
     }
 
     // Update is called once per frame
@@ -39,5 +41,13 @@ public class DefensePoint : MonoBehaviour
     {
         health -= damage;
         healthBar.SetHealth(health);
+        if (health <= 0)
+        {
+            gameOverScreen.SetActive(true);
+            Time.timeScale = 0f;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 }

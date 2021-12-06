@@ -12,6 +12,7 @@ public class BuildHUDController : MonoBehaviour
     [SerializeField] GameObject buildPanelItemPrefab;
     [SerializeField] Sprite towerUIFrame;
     [SerializeField] Sprite towerUIFrameSelected;
+    private RectTransform uiHighlightFrame;
 
     private bool buildMode = false;
     private int selectedTower = 0;
@@ -30,10 +31,20 @@ public class BuildHUDController : MonoBehaviour
             go.GetComponent<RectTransform>().anchoredPosition = new Vector2(64 + (128 * i), 0);
 
             buildPanelItems[i] = go;
+
+            TowerBuildProperties bp = towers[i].GetComponent<TowerBuildProperties>();
+            if (bp != null)
+                go.GetComponent<Image>().sprite = bp.icon;
+            else
+                go.GetComponent<Image>().sprite = towerUIFrame;
         }
+        // lastly,  instantiate the panel highlight (so it overlays the normal icons)
         if (buildPanelItems.Length > 0)
         {
-            buildPanelItems[selectedTower].GetComponent<Image>().sprite = towerUIFrameSelected;
+            GameObject go = Instantiate(buildPanelItemPrefab, buildPanel.transform);
+            go.GetComponent<Image>().sprite = towerUIFrameSelected;
+            uiHighlightFrame = go.GetComponent<RectTransform>();
+            uiHighlightFrame.anchoredPosition = new Vector2(64 + (128 * selectedTower), 0);
         }
     }
 
@@ -46,6 +57,14 @@ public class BuildHUDController : MonoBehaviour
 
         if (buildMode)
         {
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                ScrollThroughTowers(1);
+            }
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                ScrollThroughTowers(-1);
+            }
             if (Input.GetMouseButton(1) && userPlayer != null)
             {
                 // in build mode, when the player right clicks, check if the player is looking at a valid tower node
@@ -76,6 +95,15 @@ public class BuildHUDController : MonoBehaviour
             buildMode = true;
         }
         buildPanel.SetActive(buildMode);
+    }
+
+    private void ScrollThroughTowers(int step)
+    {
+        // changes the current tower selection, while also updating the frames
+        selectedTower += step;
+        if (selectedTower < 0) selectedTower = -selectedTower;
+        selectedTower = selectedTower % towers.Length;
+        uiHighlightFrame.anchoredPosition = new Vector2(64 + (128 * selectedTower), 0);
     }
 
     public void SetMainPlayer(PlayerController player)

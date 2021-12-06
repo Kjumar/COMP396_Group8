@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform spawnPoint;
 
     private Vector2 rotation;
-    private bool isMouseLocked = false;
     private Rigidbody rb;
 
     // Start is called before the first frame update
@@ -37,7 +36,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isMouseLocked)
+        if (Cursor.lockState == CursorLockMode.Locked)
         {
             // when mouse is locked, read mouse movement and rotate the player and camera
             Vector2 mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * mouseSensitivity;
@@ -55,13 +54,6 @@ public class PlayerController : MonoBehaviour
             transform.position = transform.position
                 + (transform.right * playerMove.x)
                 + (transform.forward * playerMove.y);
-        }
-        else
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                SetLockMouse(true);
-            }
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -85,14 +77,12 @@ public class PlayerController : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            isMouseLocked = true;
             return;
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            isMouseLocked = false;
         }
     }
 

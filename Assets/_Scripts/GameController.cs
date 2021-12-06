@@ -69,6 +69,7 @@ public class GameController : MonoBehaviour
         {
             Destroy(this);
         }
+        Time.timeScale = 1f;
     }
 
     // Update is called once per frame

@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildCost: 10
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: fbf4d1d3bae8da4419718d459ab1a2db, type: 3}
 --- !u!1 &968439132959082130
 GameObject:
   m_ObjectHideFlags: 0
