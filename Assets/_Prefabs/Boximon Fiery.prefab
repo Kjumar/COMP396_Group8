@@ -370,8 +370,8 @@ MonoBehaviour:
   attackRange: 1.5
   attackPower: 5
   drop: {fileID: 7208536249275199240, guid: 8c3a2f9a170886749913895666336f35, type: 3}
-  minAmount: 0
-  maxAmount: 5
+  minAmount: 1
+  maxAmount: 4
 --- !u!1 &6641013808892590356
 GameObject:
   m_ObjectHideFlags: 0

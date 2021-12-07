@@ -16,7 +16,7 @@ public class FloatingCoin : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(0f, turningSpeed, 0f);
+        transform.Rotate(0f, turningSpeed, 0f, Space.World);
     }
 
     private void OnTriggerEnter(Collider other)

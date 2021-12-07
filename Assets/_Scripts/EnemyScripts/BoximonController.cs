@@ -21,6 +21,9 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable
     private Animator anim;
     private DefensePoint target;
 
+    GameObject playerInRange = null;
+    LayerMask playerLayer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,13 +31,42 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable
         anim.SetFloat("Speed", speed);
         StartAttack smScript = anim.GetBehaviour<StartAttack>();
         smScript.controller = this;
+
+        playerLayer = LayerMask.GetMask(new string[] { "Player" });
+    }
+
+    private void FixedUpdate()
+    {
+        // check if a player is too close to the enemy
+        Collider[] colliders = Physics.OverlapSphere(transform.position, attackRange, playerLayer);
+
+        if (colliders.Length > 0)
+        {
+            playerInRange = colliders[0].gameObject;
+        }
+        else
+        {
+            playerInRange = null;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (currentPoint < wayPoints.Length)
+        // This should've been implemented as an FSM
+        // the sates are: ChasePlayer, FollowPath, and AttackObjective
+        if (playerInRange != null)
         {
+            anim.SetTrigger("Attack 01");
+            anim.SetFloat("Speed", 0);
+
+            Vector3 C2T = playerInRange.transform.position - this.transform.position;
+            Vector3 rotatedVec = Vector3.RotateTowards(this.transform.forward, C2T.normalized, turnSpeedRad * Time.deltaTime, 0.0f);
+            this.transform.rotation = Quaternion.LookRotation(rotatedVec);
+        }
+        else if (currentPoint < wayPoints.Length)
+        {
+            anim.SetFloat("Speed", speed);
             MoveTowards(wayPoints[currentPoint].position);
             
             if (Vector3.Distance(this.transform.position, wayPoints[currentPoint].position) < 0.1f)
@@ -80,7 +112,16 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable
     // to trigger this function, use anim.SetTrigger("Attack 01")
     public void AttackTarget()
     {
-        target.TakeDamage(attackPower);
+        // the way the states are ordered, the enemies will prioritize hitting players (players can essentially body block for the objective)
+        // since this gets triggered by the animator, I'm differentiating between attacking players and the objective here
+        if (playerInRange != null)
+        {
+            playerInRange.GetComponent<IDamageable>().TakeDamage(attackPower);
+        }
+        else if (target != null)
+        {
+            target.TakeDamage(attackPower);
+        }
     }
 
     public void TakeDamage(int damage)
@@ -103,7 +144,7 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable
             int amount = Random.Range(minAmount, maxAmount);
             if (amount > 0)
             {
-                GameObject go = Instantiate(drop, transform.position, Quaternion.identity);
+                GameObject go = Instantiate(drop, transform.position, drop.transform.rotation);
 
                 FloatingCoin fc = go.GetComponent<FloatingCoin>();
                 if (fc != null)

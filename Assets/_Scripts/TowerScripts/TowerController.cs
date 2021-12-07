@@ -25,6 +25,10 @@ public class TowerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (attackTimer > 0)
+        {
+            attackTimer -= Time.deltaTime;
+        }
         if (target != null)
         {
             RotateCannon(target.position);
@@ -40,10 +44,6 @@ public class TowerController : MonoBehaviour
                 {
                     targetter.SetTarget(target.gameObject);
                 }
-            }
-            else
-            {
-                attackTimer -= Time.deltaTime;
             }
         }
     }

@@ -115,7 +115,7 @@ public class GameController : MonoBehaviour
             initialBudget += linearScale;
             initialBudget = (int)(initialBudget * multiplicativeScale);
             bigEnemyBoostFactor += boostFactorScaling;
-            spawnFrequency = spawnFrequency * 0.95f;
+            spawnFrequency = spawnFrequency * 0.90f;
 
             currentBudget = initialBudget;
             currentWave++;
