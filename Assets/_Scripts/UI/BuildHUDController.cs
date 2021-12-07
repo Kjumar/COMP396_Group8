@@ -12,6 +12,7 @@ public class BuildHUDController : MonoBehaviour
     [SerializeField] GameObject buildPanelItemPrefab;
     [SerializeField] Sprite towerUIFrame;
     [SerializeField] Sprite towerUIFrameSelected;
+    [SerializeField] TowerDetailsPanel detailsPanel;
     private RectTransform uiHighlightFrame;
 
     private bool buildMode = false;
@@ -22,6 +23,7 @@ public class BuildHUDController : MonoBehaviour
     void Start()
     {
         buildPanel.SetActive(false);
+        detailsPanel.gameObject.SetActive(false);
 
         // populate the build panel
         buildPanelItems = new GameObject[towers.Length];
@@ -103,6 +105,7 @@ public class BuildHUDController : MonoBehaviour
             buildMode = true;
         }
         buildPanel.SetActive(buildMode);
+        detailsPanel.gameObject.SetActive(buildMode);
     }
 
     private void ScrollThroughTowers(int step)
@@ -112,6 +115,7 @@ public class BuildHUDController : MonoBehaviour
         if (selectedTower < 0) selectedTower = -selectedTower;
         selectedTower = selectedTower % towers.Length;
         uiHighlightFrame.anchoredPosition = new Vector2(64 + (128 * selectedTower), 0);
+        detailsPanel.UpdateTowerDetails(towers[selectedTower].GetComponent<TowerBuildProperties>());
     }
 
     public void SetMainPlayer(PlayerController player)

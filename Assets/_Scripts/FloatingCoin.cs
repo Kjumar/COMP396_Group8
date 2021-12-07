@@ -31,17 +31,4 @@ public class FloatingCoin : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if (BankController.instance != null)
-            {
-                BankController.instance.Deposit(value);
-            }
-
-            Destroy(gameObject);
-        }
-    }
 }

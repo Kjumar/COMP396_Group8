@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 165819227626784408}
   - component: {fileID: 165819227626784409}
   - component: {fileID: 165819227626784410}
-  - component: {fileID: 165819227626784411}
+  - component: {fileID: 6401455932035612476}
   m_Layer: 6
   m_Name: TowerNode
   m_TagString: TowerNode
@@ -82,8 +82,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &165819227626784411
-SphereCollider:
+--- !u!65 &6401455932035612476
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -93,5 +93,5 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 1, z: 0}

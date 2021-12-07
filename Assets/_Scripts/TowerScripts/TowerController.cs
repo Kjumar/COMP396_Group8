@@ -66,17 +66,18 @@ public class TowerController : MonoBehaviour
 
             Transform closest = null;
             float closestDistance = 0;
+            Transform objectivePos = DefensePoint.GetInstance().transform; // we want to target the enemy closest to the objective
 
             foreach (Collider hitCollider in hitColliders)
             {
                 if (closest == null)
                 {
                     closest = hitCollider.gameObject.transform;
-                    closestDistance = Vector3.Distance(closest.position, transform.position);
+                    closestDistance = Vector3.Distance(closest.position, objectivePos.position);
                 }
                 else
                 {
-                    float targetDistance = Vector3.Distance(hitCollider.gameObject.transform.position, transform.position);
+                    float targetDistance = Vector3.Distance(hitCollider.gameObject.transform.position, objectivePos.position);
                     if (targetDistance < closestDistance)
                     {
                         closest = hitCollider.gameObject.transform;
