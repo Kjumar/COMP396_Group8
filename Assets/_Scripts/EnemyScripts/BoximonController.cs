@@ -10,6 +10,11 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable
     [SerializeField] float attackRange = 1;
     [SerializeField] int attackPower = 5;
 
+    [Header("Drops on Death")]
+    [SerializeField] GameObject drop;
+    [SerializeField] int minAmount = 0;
+    [SerializeField] int maxAmount = 2;
+
     private Transform[] wayPoints;
     private int currentPoint = 0;
 
@@ -83,9 +88,29 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable
         health -= damage;
         if (health <= 0)
         {
+            SpawnDrops();
+
             // notify the gamecontroller that an enemy died, then destroy the enemy
             GameController.GetInstance().activeEnemies--;
             Destroy(gameObject);
+        }
+    }
+
+    private void SpawnDrops()
+    {
+        if (drop != null)
+        {
+            int amount = Random.Range(minAmount, maxAmount);
+            if (amount > 0)
+            {
+                GameObject go = Instantiate(drop, transform.position, Quaternion.identity);
+
+                FloatingCoin fc = go.GetComponent<FloatingCoin>();
+                if (fc != null)
+                {
+                    fc.value = amount;
+                }
+            }
         }
     }
 }

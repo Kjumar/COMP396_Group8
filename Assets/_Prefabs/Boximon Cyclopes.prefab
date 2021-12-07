@@ -1166,6 +1166,9 @@ MonoBehaviour:
   turnSpeedRad: 6
   attackRange: 2
   attackPower: 5
+  drop: {fileID: 7208536249275199240, guid: 8c3a2f9a170886749913895666336f35, type: 3}
+  minAmount: 5
+  maxAmount: 15
 --- !u!1 &4039164031363767776
 GameObject:
   m_ObjectHideFlags: 0

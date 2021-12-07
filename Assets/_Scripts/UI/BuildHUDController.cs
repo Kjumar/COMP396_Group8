@@ -76,8 +76,16 @@ public class BuildHUDController : MonoBehaviour
 
                     if (buildNode.CompareTag("TowerNode"))
                     {
-                        GameObject newTower = Instantiate(towers[selectedTower], buildNode.transform.position, Quaternion.identity);
-                        Destroy(buildNode);
+                        if (BankController.instance != null)
+                        {
+                            // check if player has enough gold in the bank
+                            TowerBuildProperties buildReqs = towers[selectedTower].GetComponent<TowerBuildProperties>();
+                            if (BankController.instance.Pay(buildReqs.buildCost))
+                            {
+                                GameObject newTower = Instantiate(towers[selectedTower], buildNode.transform.position, Quaternion.identity);
+                                Destroy(buildNode);
+                            }
+                        }
                     }
                 }
             }

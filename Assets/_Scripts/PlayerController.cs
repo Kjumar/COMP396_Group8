@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Misc")]
     [SerializeField] Transform spawnPoint;
+    [SerializeField] GameObject pauseMenu;
 
     private Vector2 rotation;
     private Rigidbody rb;
@@ -64,9 +65,10 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(new Vector3(0, jumpForce, 0));
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null)
         {
             SetLockMouse(false);
+            pauseMenu.SetActive(true);
         }
     }
 
