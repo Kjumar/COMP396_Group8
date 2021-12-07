@@ -13,6 +13,8 @@ public class TowerController : MonoBehaviour
     [SerializeField] float attackSpeed = 1; // attacks per second
     private float attackTimer;
 
+    [Header("FX")]
+    [SerializeField] ParticleSystem particleSystem;
 
     Transform target = null;
 
@@ -37,15 +39,23 @@ public class TowerController : MonoBehaviour
             {
                 attackTimer = attackSpeed;
 
-                GameObject projectile = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-                ITargetter targetter = projectile.GetComponent<ITargetter>();
-
-                if (targetter != null)
-                {
-                    targetter.SetTarget(target.gameObject);
-                }
+                Fire();
             }
         }
+    }
+
+    private void Fire()
+    {
+        GameObject projectile = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        ITargetter targetter = projectile.GetComponent<ITargetter>();
+
+        if (targetter != null)
+        {
+            targetter.SetTarget(target.gameObject);
+        }
+
+        particleSystem.Simulate(0, true, true);
+        particleSystem.Play();
     }
 
     private void RotateCannon(Vector3 targetPos)
