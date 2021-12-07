@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamageable
 {
     [Header("Camera Controls")]
     [SerializeField] Transform firstPersonCamera;
@@ -17,8 +17,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float groundCheckRadius;
     [SerializeField] LayerMask groundCheckMask;
 
+    [Header("Health")]
+    [SerializeField] int maxHealth = 50;
+    [SerializeField] int currentHealth = 50;
+    [SerializeField] UIHealthBar healthbar;
+    [SerializeField] GameObject gameOverScreen;
+
     [Header("Misc")]
     [SerializeField] Transform spawnPoint;
+    [SerializeField] GameObject pauseMenu;
 
     private Vector2 rotation;
     private Rigidbody rb;
@@ -28,6 +35,9 @@ public class PlayerController : MonoBehaviour
     {
         SetLockMouse(true);
         rb = GetComponent<Rigidbody>();
+
+        healthbar.SetMaxHealth(maxHealth);
+        healthbar.SetHealth(currentHealth);
 
         // see InGameHUDController
         FindObjectOfType<BuildHUDController>().SetMainPlayer(this);
@@ -64,9 +74,10 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(new Vector3(0, jumpForce, 0));
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null)
         {
             SetLockMouse(false);
+            pauseMenu.SetActive(true);
         }
     }
 
@@ -98,5 +109,21 @@ public class PlayerController : MonoBehaviour
     public Vector3 GetCameraLookAt()
     {
         return firstPersonCamera.transform.forward;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth < 0)
+        {
+            // trigger game over
+            currentHealth = 0;
+            gameOverScreen.SetActive(true);
+            Time.timeScale = 0f;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        healthbar.SetHealth(currentHealth);
     }
 }
