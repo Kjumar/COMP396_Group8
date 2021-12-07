@@ -8,7 +8,10 @@ public class BuildHUDController : MonoBehaviour
     [SerializeField] GameObject buildPanel;
 
     [SerializeField] GameObject[] towers;
+    [SerializeField] GameObject previewHologram;
     private GameObject[] buildPanelItems;
+
+    [Header("UI Objects")]
     [SerializeField] GameObject buildPanelItemPrefab;
     [SerializeField] Sprite towerUIFrame;
     [SerializeField] Sprite towerUIFrameSelected;
@@ -24,6 +27,7 @@ public class BuildHUDController : MonoBehaviour
     {
         buildPanel.SetActive(false);
         detailsPanel.gameObject.SetActive(false);
+        previewHologram.SetActive(false); // hide the preview hologram
 
         // populate the build panel
         buildPanelItems = new GameObject[towers.Length];
@@ -91,6 +95,37 @@ public class BuildHUDController : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    // build preview
+    private void FixedUpdate()
+    {
+        if (buildMode)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(userPlayer.gameObject.transform.position, userPlayer.GetCameraLookAt(), out hit, 50))
+            {
+                GameObject buildNode = hit.collider.gameObject;
+
+                if (buildNode.CompareTag("TowerNode"))
+                {
+                    previewHologram.SetActive(true);
+                    previewHologram.transform.position = buildNode.transform.position;
+                }
+                else
+                {
+                    previewHologram.SetActive(false);
+                }
+            }
+            else
+            {
+                previewHologram.SetActive(false);
+            }
+        }
+        else
+        {
+            previewHologram.SetActive(false);
         }
     }
 
