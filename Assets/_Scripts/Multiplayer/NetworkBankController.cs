@@ -45,14 +45,14 @@ public class NetworkBankController : NetworkBehaviour
 
     public void Deposit(int amount)
     {
-        PlaySFX();
+        RpcPlaySFX();
 
         bank += amount;
         UpdateText();
     }
 
     [ClientRpc]
-    private void PlaySFX()
+    private void RpcPlaySFX()
     {
         if (sfx != null) sfx.PlayOneShot(sfx.clip);
     }

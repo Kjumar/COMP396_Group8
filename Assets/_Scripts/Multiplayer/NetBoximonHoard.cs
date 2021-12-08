@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class NetBoximonScript : NetworkBehaviour, IPathable, IDamageable, IAttacker
+public class NetBoximonHoard : NetworkBehaviour, IPathable, IDamageable, IAttacker
 {
-    [SerializeField] int health = 10;
-    [SerializeField] float speed = 4;
+    [SerializeField] int health = 15;
+    [SerializeField] float speed = 5;
     [SerializeField] float turnSpeedRad = 8;
-    [SerializeField] float attackRange = 1;
-    [SerializeField] int attackPower = 5;
+    [SerializeField] float attackRange = 2;
+    [SerializeField] int attackPower = 2;
 
     [Header("Drops on Death")]
     [SerializeField] GameObject drop;
     [SerializeField] int minAmount = 0;
     [SerializeField] int maxAmount = 2;
+    [SerializeField] GameObject subSpawn;
+    [SerializeField] int subSpawnAmount = 2;
 
     public Transform[] wayPoints;
     private int currentPoint = 0;
@@ -102,22 +104,18 @@ public class NetBoximonScript : NetworkBehaviour, IPathable, IDamageable, IAttac
         this.transform.rotation = Quaternion.LookRotation(rotatedVec);
     }
 
-
     public void SetPath(Transform[] wayPoints)
     {
         this.wayPoints = wayPoints;
     }
 
-    // AttackTarget gets called by the animator script whenever the attack animation starts
-    // to trigger this function, use anim.SetTrigger("Attack 01")
     public void AttackTarget()
     {
         // the way the states are ordered, the enemies will prioritize hitting players (players can essentially body block for the objective)
         // since this gets triggered by the animator, I'm differentiating between attacking players and the objective here
         if (playerInRange != null)
         {
-            IDamageable damageable = playerInRange.GetComponent<IDamageable>();
-            if (damageable != null) damageable.TakeDamage(attackPower);
+            playerInRange.GetComponent<IDamageable>().TakeDamage(attackPower);
         }
         else if (target != null)
         {
@@ -168,6 +166,18 @@ public class NetBoximonScript : NetworkBehaviour, IPathable, IDamageable, IAttac
                 }
 
                 NetworkServer.Spawn(go);
+            }
+        }
+
+        if (subSpawn != null)
+        {
+            for (int i = 0; i < subSpawnAmount; i++)
+            {
+                GameObject go = Instantiate(subSpawn, transform.position + new Vector3(Random.Range(0f, 1.5f), 0f, Random.Range(0f, 1.5f)),
+                    transform.rotation);
+                NetworkServer.Spawn(go);
+
+                NetworkGameController.activeEnemies++;
             }
         }
     }

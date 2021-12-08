@@ -646,12 +646,13 @@ MonoBehaviour:
   spawnableEnemies:
   - {fileID: 6640996075874300434, guid: 48165f2c57308904081ae8023c385c85, type: 3}
   - {fileID: 4039081479206035254, guid: a0a0f718c5d89cf469a060eaa32803a2, type: 3}
-  spawningCost: 0200000006000000
+  - {fileID: 6039399863723226559, guid: 31f23c083dc33d24bb9538c564029e27, type: 3}
+  spawningCost: 02000000060000000a000000
   initialBudget: 40
   linearScale: 10
   multiplicativeScale: 1.2
   spawnFrequency: 1
-  bigEnemyBoostFactor: 1
+  bigEnemyBoostFactor: 0.9
   boostFactorScaling: 0.05
   spawnZones:
   - {fileID: 46691368}
@@ -15421,6 +15422,7 @@ MonoBehaviour:
   - {fileID: 7208536249275199240, guid: 7619a691f6b542647b1d8d845c63358f, type: 3}
   - {fileID: 4039081479206035254, guid: a0a0f718c5d89cf469a060eaa32803a2, type: 3}
   - {fileID: 3525932473873242535, guid: e1d126f6431fdc94b9563a37b8e61209, type: 3}
+  - {fileID: 6039399863723226559, guid: 31f23c083dc33d24bb9538c564029e27, type: 3}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
