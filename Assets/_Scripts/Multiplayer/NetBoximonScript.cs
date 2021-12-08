@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class BoximonController : MonoBehaviour, IPathable, IDamageable, IAttacker
+public class NetBoximonScript : NetworkBehaviour, IPathable, IDamageable, IAttacker
 {
     [SerializeField] int health = 10;
     [SerializeField] float speed = 4;
@@ -15,14 +16,14 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable, IAttacke
     [SerializeField] int minAmount = 0;
     [SerializeField] int maxAmount = 2;
 
-    private Transform[] wayPoints;
+    public Transform[] wayPoints;
     private int currentPoint = 0;
 
     private Animator anim;
-    private DefensePoint target;
+    private NetworkDefensePoint target;
 
     GameObject playerInRange = null;
-    LayerMask playerLayer;
+    public LayerMask playerLayer;
 
     // Start is called before the first frame update
     void Start()
@@ -31,8 +32,6 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable, IAttacke
         anim.SetFloat("Speed", speed);
         StartAttack smScript = anim.GetBehaviour<StartAttack>();
         smScript.controller = this;
-
-        playerLayer = LayerMask.GetMask(new string[] { "Player" });
     }
 
     private void FixedUpdate()
@@ -68,7 +67,7 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable, IAttacke
         {
             anim.SetFloat("Speed", speed);
             MoveTowards(wayPoints[currentPoint].position);
-            
+
             if (Vector3.Distance(this.transform.position, wayPoints[currentPoint].position) < 0.1f)
             {
                 currentPoint += 1;
@@ -88,7 +87,7 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable, IAttacke
         }
         else
         {
-            target = DefensePoint.GetInstance();
+            target = FindObjectOfType<NetworkDefensePoint>();
         }
     }
 
@@ -102,6 +101,7 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable, IAttacke
         Vector3 rotatedVec = Vector3.RotateTowards(this.transform.forward, C2T.normalized, turnSpeedRad * Time.deltaTime, 0.0f);
         this.transform.rotation = Quaternion.LookRotation(rotatedVec);
     }
+
 
     public void SetPath(Transform[] wayPoints)
     {
@@ -120,6 +120,10 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable, IAttacke
         }
         else if (target != null)
         {
+            if (!isServer)
+            {
+                return;
+            }
             target.TakeDamage(attackPower);
         }
     }
@@ -129,12 +133,22 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable, IAttacke
         health -= damage;
         if (health <= 0)
         {
-            SpawnDrops();
+            if (!isServer)
+            {
+                return;
+            }
 
             // notify the gamecontroller that an enemy died, then destroy the enemy
-            GameController.GetInstance().activeEnemies--;
-            Destroy(gameObject);
+            NetworkGameController.activeEnemies--;
+            CmdDestroy();
         }
+    }
+
+    [Command]
+    private void CmdDestroy()
+    {
+        SpawnDrops();
+        NetworkServer.Destroy(gameObject);
     }
 
     private void SpawnDrops()
@@ -146,11 +160,13 @@ public class BoximonController : MonoBehaviour, IPathable, IDamageable, IAttacke
             {
                 GameObject go = Instantiate(drop, transform.position, drop.transform.rotation);
 
-                FloatingCoin fc = go.GetComponent<FloatingCoin>();
+                NetFloatingCoin fc = go.GetComponent<NetFloatingCoin>();
                 if (fc != null)
                 {
                     fc.value = amount;
                 }
+
+                NetworkServer.Spawn(go);
             }
         }
     }

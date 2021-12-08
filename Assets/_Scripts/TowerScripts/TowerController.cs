@@ -14,7 +14,7 @@ public class TowerController : MonoBehaviour
     private float attackTimer;
 
     [Header("FX")]
-    [SerializeField] ParticleSystem particleSystem;
+    [SerializeField] ParticleSystem fireParticles;
 
     Transform target = null;
 
@@ -54,8 +54,11 @@ public class TowerController : MonoBehaviour
             targetter.SetTarget(target.gameObject);
         }
 
-        particleSystem.Simulate(0, true, true);
-        particleSystem.Play();
+        if (fireParticles != null)
+        {
+            fireParticles.Simulate(0, true, true);
+            fireParticles.Play();
+        }
     }
 
     private void RotateCannon(Vector3 targetPos)
