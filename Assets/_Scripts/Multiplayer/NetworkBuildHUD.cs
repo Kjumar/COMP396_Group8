@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class BuildHUDController : MonoBehaviour
+public class NetworkBuildHUD : MonoBehaviour
 {
     [SerializeField] GameObject buildPanel;
 
@@ -18,9 +19,12 @@ public class BuildHUDController : MonoBehaviour
     [SerializeField] TowerDetailsPanel detailsPanel;
     private RectTransform uiHighlightFrame;
 
+    [Header("Currency System")]
+    [SerializeField] NetworkBankController bankControl;
+
     private bool buildMode = false;
     private int selectedTower = 0;
-    private PlayerController userPlayer;
+    private NetworkPlayerController userPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -82,20 +86,19 @@ public class BuildHUDController : MonoBehaviour
 
                     if (buildNode.CompareTag("TowerNode"))
                     {
-                        if (BankController.instance != null)
+                        if (bankControl != null)
                         {
                             // check if player has enough gold in the bank
                             TowerBuildProperties buildReqs = towers[selectedTower].GetComponent<TowerBuildProperties>();
-                            if (BankController.instance.Pay(buildReqs.buildCost))
+                            if (bankControl.CanPay(buildReqs.buildCost))
                             {
-                                GameObject newTower = Instantiate(towers[selectedTower], buildNode.transform.position, Quaternion.identity);
-                                Destroy(buildNode);
+                                userPlayer.CmdSpawnTower(selectedTower, buildNode, buildReqs.buildCost);
                             }
                         }
                     }
                 }
             }
-        }
+        } 
     }
 
     // build preview
@@ -153,7 +156,7 @@ public class BuildHUDController : MonoBehaviour
         detailsPanel.UpdateTowerDetails(towers[selectedTower].GetComponent<TowerBuildProperties>());
     }
 
-    public void SetMainPlayer(PlayerController player)
+    public void SetMainPlayer(NetworkPlayerController player)
     {
         // this is an extra step and might seem like jumping through hoops,
         // but to make multiplayer easier to implement I'm enforcing that the player needs to register themself
@@ -161,5 +164,4 @@ public class BuildHUDController : MonoBehaviour
 
         userPlayer = player;
     }
-
 }
