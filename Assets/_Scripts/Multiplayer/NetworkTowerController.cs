@@ -16,6 +16,7 @@ public class NetworkTowerController : NetworkBehaviour
 
     [Header("FX")]
     [SerializeField] ParticleSystem fireParticles;
+    [SerializeField] AudioSource sfx;
 
     Transform target = null;
     private int scanInterval = 6; // amount fo physics frames to skip
@@ -66,6 +67,8 @@ public class NetworkTowerController : NetworkBehaviour
     //[Command]
     private void Fire()
     {
+        if (sfx != null) sfx.PlayOneShot(sfx.clip);
+
         GameObject projectile = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
         ITargetter targetter = projectile.GetComponent<ITargetter>();
 

@@ -9,6 +9,7 @@ public class NetworkBankController : NetworkBehaviour
     [SyncVar]
     [SerializeField] int bank = 100; // starting amount
     [SerializeField] Text bankText;
+    [SerializeField] AudioSource sfx;
 
     public override void OnStartClient()
     {
@@ -44,8 +45,16 @@ public class NetworkBankController : NetworkBehaviour
 
     public void Deposit(int amount)
     {
+        PlaySFX();
+
         bank += amount;
         UpdateText();
+    }
+
+    [ClientRpc]
+    private void PlaySFX()
+    {
+        if (sfx != null) sfx.PlayOneShot(sfx.clip);
     }
 
     public void Withdraw(int amount)
