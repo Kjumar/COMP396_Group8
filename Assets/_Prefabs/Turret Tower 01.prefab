@@ -68,7 +68,7 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 8410681134174558577}
   bulletPrefab: {fileID: 2363847474254086775, guid: 8f3e0d7baed6dbc4f8dd42648f5b4e63, type: 3}
   attackSpeed: 1
-  particleSystem: {fileID: 6364581962331282233}
+  fireParticles: {fileID: 6364581962331282233}
 --- !u!114 &-2274132180193839732
 MonoBehaviour:
   m_ObjectHideFlags: 0

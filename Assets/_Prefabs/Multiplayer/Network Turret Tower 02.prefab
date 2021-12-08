@@ -5017,11 +5017,12 @@ GameObject:
   - component: {fileID: 3529576986851060605}
   - component: {fileID: 3503159330828718633}
   - component: {fileID: 3510955137889676725}
-  - component: {fileID: 6625835537428667453}
   - component: {fileID: 5138832930455098080}
   - component: {fileID: 6614337598470630007}
+  - component: {fileID: -2593170564525175945}
+  - component: {fileID: -4211652401513030186}
   m_Layer: 0
-  m_Name: Turret Tower 02
+  m_Name: Network Turret Tower 02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5091,27 +5092,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6625835537428667453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3525932473873242535}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf97a364fc8e0ac41b8ca9d3c9b18a78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  range: 9
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  cannonHead: {fileID: 8813813530887693581}
-  bulletSpawnPoint: {fileID: 7760327206139954328}
-  bulletPrefab: {fileID: 2363847474254086775, guid: 9f559d3a325f3f1409ca8b6bbe3e9f05, type: 3}
-  attackSpeed: 3
-  fireParticles: {fileID: 781982717575364130}
 --- !u!114 &5138832930455098080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5144,3 +5124,57 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4.428992, y: 4.488503, z: 3.9235973}
   m_Center: {x: 0, y: 2.244251, z: 0.03234589}
+--- !u!114 &-2593170564525175945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3525932473873242535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &-4211652401513030186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3525932473873242535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea6e4597b20f9847b5d5133c4df36b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 9
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  cannonHead: {fileID: 8813813530887693581}
+  bulletSpawnPoint: {fileID: 7760327206139954328}
+  bulletPrefab: {fileID: 2363847474254086775, guid: f55adb86ada5cfa408629ac476491c34, type: 3}
+  attackSpeed: 3
+  fireParticles: {fileID: 0}

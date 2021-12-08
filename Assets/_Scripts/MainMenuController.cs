@@ -7,6 +7,7 @@ public class MainMenuController : MonoBehaviour
 {
     [SerializeField] GameObject mainMenu;
     [SerializeField] GameObject singleplayerMenu;
+    [SerializeField] GameObject multiplayerMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,12 @@ public class MainMenuController : MonoBehaviour
         singleplayerMenu.SetActive(true);
     }
 
+    public void OpenMultiplayerMenu()
+    {
+        mainMenu.SetActive(false);
+        multiplayerMenu.SetActive(true);
+    }
+
     public void OpenSettingsMenu()
     {
         mainMenu.SetActive(false);
@@ -35,5 +42,6 @@ public class MainMenuController : MonoBehaviour
     {
         mainMenu.SetActive(true);
         singleplayerMenu.SetActive(false);
+        multiplayerMenu.SetActive(false);
     }
 }
