@@ -618,6 +618,8 @@ GameObject:
   - component: {fileID: 110039108}
   - component: {fileID: 110039107}
   - component: {fileID: 110039106}
+  - component: {fileID: 110039110}
+  - component: {fileID: 110039109}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -700,6 +702,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &110039109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110039105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4ce7fc5f36e6064e9273d15320109e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musics:
+  - soundName: SndBGLvl1
+    clip: {fileID: 8300000, guid: ecc6e017b4c2947428cd1bec631038d1, type: 3}
+--- !u!114 &110039110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110039105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4ce7fc5f36e6064e9273d15320109e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musics: []
 --- !u!1 &126567690
 GameObject:
   m_ObjectHideFlags: 0
