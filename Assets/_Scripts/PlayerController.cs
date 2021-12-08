@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamageable
@@ -23,9 +24,21 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] UIHealthBar healthbar;
     [SerializeField] GameObject gameOverScreen;
 
+    [Header("Sounds")]
+    [SerializeField]
+    Sounds[] jumpSounds;
+    [SerializeField]
+    Sounds[] takeDamageSounds;
+    [SerializeField]
+    AudioSource walk;
+
+    private Sounds soundScript = new Sounds();
+
     [Header("Misc")]
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject pauseMenu;
+
+    
 
     private Vector2 rotation;
     private Rigidbody rb;
@@ -41,6 +54,10 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         // see InGameHUDController
         FindObjectOfType<BuildHUDController>().SetMainPlayer(this);
+
+        // Load sounds:
+        soundScript.LoadSounds(jumpSounds);
+        soundScript.LoadSounds(takeDamageSounds);
     }
 
     // Update is called once per frame
@@ -72,12 +89,21 @@ public class PlayerController : MonoBehaviour, IDamageable
             if (Physics.CheckSphere(groundCheckPos.position, groundCheckRadius, groundCheckMask))
             {
                 rb.AddForce(new Vector3(0, jumpForce, 0));
+                soundScript.PlayRandomSound(jumpSounds);
             }
         }
         if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null)
         {
             SetLockMouse(false);
             pauseMenu.SetActive(true);
+        }
+    }
+
+    public void RunningSound()
+    {
+        if (!walk.isPlaying)
+        {
+            walk.Play();
         }
     }
 
@@ -114,6 +140,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        soundScript.PlayRandomSound(takeDamageSounds);
         if (currentHealth < 0)
         {
             // trigger game over
@@ -125,5 +152,6 @@ public class PlayerController : MonoBehaviour, IDamageable
             Cursor.visible = true;
         }
         healthbar.SetHealth(currentHealth);
+
     }
 }
