@@ -201,7 +201,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 154029674}
   m_OnClick:
     m_PersistentCalls:
@@ -443,7 +443,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 171164076}
   m_OnClick:
     m_PersistentCalls:
@@ -1124,7 +1124,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 636849628}
   m_OnClick:
     m_PersistentCalls:
@@ -3314,7 +3314,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1994496059}
   m_OnClick:
     m_PersistentCalls:
@@ -3878,7 +3878,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Settings
+  m_Text: How to Play
 --- !u!222 &2135309007
 CanvasRenderer:
   m_ObjectHideFlags: 0

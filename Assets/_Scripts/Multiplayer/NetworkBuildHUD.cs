@@ -75,7 +75,7 @@ public class NetworkBuildHUD : MonoBehaviour
             {
                 ScrollThroughTowers(-1);
             }
-            if (Input.GetMouseButton(1) && userPlayer != null)
+            if (Input.GetMouseButton(0) && userPlayer != null)
             {
                 // in build mode, when the player right clicks, check if the player is looking at a valid tower node
                 // if so, build the selected tower on it

@@ -58,4 +58,9 @@ public class NetworkBankController : NetworkBehaviour
     {
         bankText.text = bank.ToString();
     }
+
+    public int GetBalance()
+    {
+        return bank;
+    }
 }

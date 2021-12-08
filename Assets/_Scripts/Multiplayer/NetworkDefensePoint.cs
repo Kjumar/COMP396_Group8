@@ -40,4 +40,9 @@ public class NetworkDefensePoint : NetworkBehaviour
         health -= damage;
         healthBar.SetHealth(health);
     }
+
+    public int GetHealth()
+    {
+        return health;
+    }
 }

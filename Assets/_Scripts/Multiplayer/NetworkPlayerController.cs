@@ -43,11 +43,13 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
         rb = GetComponent<Rigidbody>();
 
         GameObject playerHB = GameObject.Find("PlayerHealthBar");
-        if (playerHB != null) healthbar = playerHB.GetComponent<UIHealthBar>();
+        if (playerHB != null)
+        {
+            healthbar = playerHB.GetComponent<UIHealthBar>();
+            healthbar.SetMaxHealth(maxHealth);
+            healthbar.SetHealth(currentHealth);
+        }
         else Debug.Log("Could not find 'PlayerHealthBar' in scene");
-
-        //healthbar.SetMaxHealth(maxHealth);
-        //healthbar.SetHealth(currentHealth);
 
         // see InGameHUDController
         NetworkBuildHUD buildHud = FindObjectOfType<NetworkBuildHUD>();
@@ -77,38 +79,40 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
             return;
         }
 
-        if (currentHealth <= 0)
-        {
-            HandleGhostMovement();
-            return;
-        }
-
         if (Cursor.lockState == CursorLockMode.Locked)
         {
-            // when mouse is locked, read mouse movement and rotate the player and camera
-            Vector2 mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * mouseSensitivity;
-            rotation += mouseMovement;
-
-            // limit rotation so the player doesn't flip on their head
-            rotation.y = Mathf.Clamp(rotation.y, -80, 80);
-
-            // apply rotation
-            firstPersonCamera.localRotation = Quaternion.Euler(rotation.y, 0, 0);
-            transform.localRotation = Quaternion.Euler(0, rotation.x, 0);
-
-            // manual player movement
-            Vector2 playerMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * speed * Time.deltaTime;
-            transform.position = transform.position
-                + (transform.right * playerMove.x)
-                + (transform.forward * playerMove.y);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            // jump
-            if (Physics.CheckSphere(groundCheckPos.position, groundCheckRadius, groundCheckMask))
+            if (currentHealth <= 0)
             {
-                rb.AddForce(new Vector3(0, jumpForce, 0));
+                HandleGhostMovement();
+                return;
+            }
+            else
+            {
+                // when mouse is locked, read mouse movement and rotate the player and camera
+                Vector2 mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * mouseSensitivity;
+                rotation += mouseMovement;
+
+                // limit rotation so the player doesn't flip on their head
+                rotation.y = Mathf.Clamp(rotation.y, -80, 80);
+
+                // apply rotation
+                firstPersonCamera.localRotation = Quaternion.Euler(rotation.y, 0, 0);
+                transform.localRotation = Quaternion.Euler(0, rotation.x, 0);
+
+                // manual player movement
+                Vector2 playerMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * speed * Time.deltaTime;
+                transform.position = transform.position
+                    + (transform.right * playerMove.x)
+                    + (transform.forward * playerMove.y);
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    // jump
+                    if (Physics.CheckSphere(groundCheckPos.position, groundCheckRadius, groundCheckMask))
+                    {
+                        rb.AddForce(new Vector3(0, jumpForce, 0));
+                    }
+                }
             }
         }
     }

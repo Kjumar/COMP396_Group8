@@ -21,6 +21,9 @@ public class NetworkGameController : NetworkBehaviour
     [SerializeField] float timeBetweenWaves = 20f;
     [SerializeField] Text overheadTextUI;
     private float timeToNextWave = 0;
+    [SerializeField] GameObject winScreen;
+    [SerializeField] Text scoreText;
+    [SerializeField] PauseScreenController pauseScreen;
 
     [Header("Enemy Spawn Logic")]
     [SerializeField] GameObject[] spawnableEnemies;
@@ -108,6 +111,7 @@ public class NetworkGameController : NetworkBehaviour
             activeEnemies = 0;
             currentBudget = initialBudget;
             currentWave++;
+
             currentPhase = LevelPhase.WavePhase;
             overheadTextUI.text = "WAVE " + currentWave + " / " + maxWaves;
             RpcUpdateOverheadText("WAVE " + currentWave + " / " + maxWaves);
@@ -125,9 +129,17 @@ public class NetworkGameController : NetworkBehaviour
         {
             if (activeEnemies <= 0)
             {
-                currentPhase = LevelPhase.PlanningPhase;
-                timeToNextWave = timeBetweenWaves;
-                RpcUpdateOverheadText("PLANNING NEXT WAVE");
+                if (currentWave + 1 > maxWaves)
+                {
+                    currentPhase = LevelPhase.PlayerWin;
+                    RpcShowVictoryScreen();
+                }
+                else
+                {
+                    currentPhase = LevelPhase.PlanningPhase;
+                    timeToNextWave = timeBetweenWaves;
+                    RpcUpdateOverheadText("PLANNING NEXT WAVE");
+                }
             }
         }
         else
@@ -193,5 +205,26 @@ public class NetworkGameController : NetworkBehaviour
     void RpcUpdateOverheadText(string text)
     {
         overheadTextUI.text = text;
+    }
+
+    [ClientRpc]
+    void RpcShowVictoryScreen()
+    {
+        Time.timeScale = 0f;
+
+        pauseScreen.gameObject.SetActive(false);
+        pauseScreen.enabled = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        NetworkDefensePoint objective = FindObjectOfType<NetworkDefensePoint>();
+        NetworkBankController bank = FindObjectOfType<NetworkBankController>();
+
+        if (objective != null && bank != null)
+        {
+            scoreText.text = "You achieved a score of: " + (bank.GetBalance() * objective.GetHealth());
+        }
+
+        winScreen.SetActive(true);
     }
 }
