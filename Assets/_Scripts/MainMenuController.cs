@@ -47,4 +47,9 @@ public class MainMenuController : MonoBehaviour
         multiplayerMenu.SetActive(false);
         howToPlayMenu.SetActive(false);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
