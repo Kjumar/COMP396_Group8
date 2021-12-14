@@ -38,7 +38,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject pauseMenu;
 
-    
+    [Header("Bullet")]
+    public GameObject bulletPrefab;
+    public Camera playerCam;
 
     private Vector2 rotation;
     private Rigidbody rb;
@@ -63,6 +65,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
+        
         if (Cursor.lockState == CursorLockMode.Locked)
         {
             // when mouse is locked, read mouse movement and rotate the player and camera
@@ -97,6 +100,12 @@ public class PlayerController : MonoBehaviour, IDamageable
             SetLockMouse(false);
             pauseMenu.SetActive(true);
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject bullet = Instantiate(bulletPrefab, playerCam.transform.position, Quaternion.identity);
+            bullet.transform.position = playerCam.transform.position + playerCam.transform.forward;
+            bullet.transform.forward = bullet.transform.forward;
+        }
     }
 
     public void RunningSound()
@@ -114,12 +123,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            Time.timeScale = 1f;
             return;
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            Time.timeScale = 0f;
         }
     }
 

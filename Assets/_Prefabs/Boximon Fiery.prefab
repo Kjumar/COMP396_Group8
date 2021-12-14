@@ -271,7 +271,7 @@ GameObject:
   - component: {fileID: 5362561534667388562}
   m_Layer: 8
   m_Name: Boximon Fiery
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
