@@ -28,6 +28,8 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
     [SerializeField] Transform bulletSpawnPoint;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletSpeed;
+    private float attackSpeed = 0.5f;
+    private float attackCooldown = 0;
 
     [Header("Misc")]
     [SerializeField] Transform spawnPoint;
@@ -109,7 +111,15 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
                 handCannon.localRotation = Quaternion.Euler(rotation.y, 0, 0);
 
                 // manual player movement
-                Vector2 playerMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * speed * Time.deltaTime;
+                // input manager axis were glitching out, so I'm manually checking each button
+                float horizontal = 0;
+                float vertical = 0;
+                if (Input.GetKey(KeyCode.W)) vertical = 1;
+                else if (Input.GetKey(KeyCode.S)) vertical = -1;
+                if (Input.GetKey(KeyCode.A)) horizontal = -1;
+                else if (Input.GetKey(KeyCode.D)) horizontal = 1;
+
+                Vector2 playerMove = new Vector2(horizontal, vertical).normalized * speed * Time.deltaTime;
                 transform.position = transform.position
                     + (transform.right * playerMove.x)
                     + (transform.forward * playerMove.y);
@@ -123,9 +133,14 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
                     }
                 }
 
-                if (!buildHud.buildMode && Input.GetMouseButtonDown(0))
+                if (attackCooldown > 0)
+                {
+                    attackCooldown -= Time.deltaTime;
+                }
+                else if (!buildHud.buildMode && Input.GetMouseButtonDown(0))
                 {
                     CmdFire();
+                    attackCooldown = attackSpeed;
                 }
             }
         }

@@ -24,7 +24,7 @@ public class NetPlayerBullet : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isLocalPlayer)
+        if (!isServer)
         {
             return;
         }
