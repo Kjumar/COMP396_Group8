@@ -18,7 +18,7 @@ public class BuildHUDController : MonoBehaviour
     [SerializeField] TowerDetailsPanel detailsPanel;
     private RectTransform uiHighlightFrame;
 
-    private bool buildMode = false;
+    public bool buildMode = false;
     private int selectedTower = 0;
     private PlayerController userPlayer;
 
