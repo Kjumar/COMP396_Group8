@@ -18,6 +18,9 @@ public class NetBoximonHoard : NetworkBehaviour, IPathable, IDamageable, IAttack
     [SerializeField] GameObject subSpawn;
     [SerializeField] int subSpawnAmount = 2;
 
+    [Header("SFX")]
+    [SerializeField] AudioSource audio;
+
     public Transform[] wayPoints;
     private int currentPoint = 0;
 
@@ -129,6 +132,7 @@ public class NetBoximonHoard : NetworkBehaviour, IPathable, IDamageable, IAttack
 
     public void TakeDamage(int damage)
     {
+        audio.PlayOneShot(audio.clip);
         health -= damage;
         if (health <= 0)
         {
@@ -140,6 +144,10 @@ public class NetBoximonHoard : NetworkBehaviour, IPathable, IDamageable, IAttack
             // notify the gamecontroller that an enemy died, then destroy the enemy
             NetworkGameController.activeEnemies--;
             CmdDestroy();
+        }
+        else
+        {
+            audio.PlayOneShot(audio.clip);
         }
     }
 

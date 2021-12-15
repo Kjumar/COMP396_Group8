@@ -155,19 +155,6 @@ public class NetworkGameController : NetworkBehaviour
                 int enemyIndex = Mathf.FloorToInt(((n + 1) / ((num / bigEnemyBoostFactor) + 1)) - 1);
                 if (enemyIndex < 0) enemyIndex = 0;
 
-                //for (int i = enemyIndex; i >= 0; i--)
-                //{
-                //    if (spawningCost[i] < currentBudget || i == 0)
-                //    {
-                //        // randomly pick a spawn zone
-                //        int zone = Random.Range(0, spawnZones.Length);
-                //        spawnZones[zone].spawnEnemyRandomly(spawnableEnemies[i]);
-
-                //        activeEnemies += 1;
-                //        currentBudget -= spawningCost[i];
-                //        i = 0;
-                //    }
-                //}
                 CmdSpawnEnemy(enemyIndex);
 
                 spawnCooldown = spawnFrequency;

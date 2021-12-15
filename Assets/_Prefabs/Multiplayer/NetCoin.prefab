@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5376888140372348175}
   - component: {fileID: -5986929121689103282}
   - component: {fileID: 9147169140250489527}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: NetCoin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

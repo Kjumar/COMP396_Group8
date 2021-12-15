@@ -16,6 +16,9 @@ public class NetBoximonScript : NetworkBehaviour, IPathable, IDamageable, IAttac
     [SerializeField] int minAmount = 0;
     [SerializeField] int maxAmount = 2;
 
+    [Header("SFX")]
+    [SerializeField] AudioSource audio;
+
     public Transform[] wayPoints;
     private int currentPoint = 0;
 
@@ -142,6 +145,10 @@ public class NetBoximonScript : NetworkBehaviour, IPathable, IDamageable, IAttac
             // notify the gamecontroller that an enemy died, then destroy the enemy
             NetworkGameController.activeEnemies--;
             CmdDestroy();
+        }
+        else
+        {
+            audio.PlayOneShot(audio.clip);
         }
     }
 

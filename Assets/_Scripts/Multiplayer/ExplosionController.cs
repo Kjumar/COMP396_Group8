@@ -9,6 +9,7 @@ public class ExplosionController : MonoBehaviour
     [SerializeField] float tickRate = 1;
     [SerializeField] float effectRadius = 4;
     [SerializeField] LayerMask targetMask;
+    [SerializeField] AudioSource soundFX;
     private float tickTimer = 0;
 
     private void Update()
@@ -26,6 +27,11 @@ public class ExplosionController : MonoBehaviour
                 {
                     damageable.TakeDamage(damage);
                 }
+            }
+
+            if (colliders.Length > 0)
+            {
+                soundFX.PlayOneShot(soundFX.clip);
             }
         }
 

@@ -44,7 +44,6 @@ public class NetPlayerBullet : NetworkBehaviour
     [Command]
     private void CmdDestroy()
     {
-        Debug.Log("destroying");
         NetworkServer.Destroy(gameObject);
     }
 }
