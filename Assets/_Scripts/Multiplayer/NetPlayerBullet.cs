@@ -24,7 +24,7 @@ public class NetPlayerBullet : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isLocalPlayer)
+        if (!isServer)
         {
             return;
         }
@@ -44,6 +44,7 @@ public class NetPlayerBullet : NetworkBehaviour
     [Command]
     private void CmdDestroy()
     {
+        Debug.Log("destroying");
         NetworkServer.Destroy(gameObject);
     }
 }

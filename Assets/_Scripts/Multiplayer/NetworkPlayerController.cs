@@ -28,6 +28,8 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
     [SerializeField] Transform bulletSpawnPoint;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletSpeed;
+    private float attackSpeed = 0.5f;
+    private float attackCooldown = 0;
 
     [Header("Misc")]
     [SerializeField] Transform spawnPoint;
@@ -123,9 +125,14 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
                     }
                 }
 
-                if (!buildHud.buildMode && Input.GetMouseButtonDown(0))
+                if (attackCooldown > 0)
+                {
+                    attackCooldown -= Time.deltaTime;
+                }
+                else if (!buildHud.buildMode && Input.GetMouseButtonDown(0))
                 {
                     CmdFire();
+                    attackCooldown = attackSpeed;
                 }
             }
         }

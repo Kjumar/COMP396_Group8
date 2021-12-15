@@ -150,7 +150,7 @@ public class NetworkBuildHUD : MonoBehaviour
     {
         // changes the current tower selection, while also updating the frames
         selectedTower += step;
-        if (selectedTower < 0) selectedTower = -selectedTower;
+        if (selectedTower < 0) selectedTower += towers.Length;
         selectedTower = selectedTower % towers.Length;
         uiHighlightFrame.anchoredPosition = new Vector2(64 + (128 * selectedTower), 0);
         detailsPanel.UpdateTowerDetails(towers[selectedTower].GetComponent<TowerBuildProperties>());
