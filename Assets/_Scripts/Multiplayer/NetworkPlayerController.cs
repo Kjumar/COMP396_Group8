@@ -23,6 +23,12 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
     [SerializeField] int currentHealth = 50;
     [SerializeField] UIHealthBar healthbar;
 
+    [Header("Shooting")]
+    [SerializeField] Transform handCannon;
+    [SerializeField] Transform bulletSpawnPoint;
+    [SerializeField] GameObject bulletPrefab;
+    [SerializeField] float bulletSpeed;
+
     [Header("Misc")]
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject[] towerPrefabs; // we need a direct reference to each prefab to spawn them over the network
@@ -31,6 +37,8 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
 
     private Vector2 rotation;
     private Rigidbody rb;
+
+    private NetworkBuildHUD buildHud;
 
     public override void OnStartLocalPlayer()
     {
@@ -52,7 +60,7 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
         else Debug.Log("Could not find 'PlayerHealthBar' in scene");
 
         // see InGameHUDController
-        NetworkBuildHUD buildHud = FindObjectOfType<NetworkBuildHUD>();
+        buildHud = FindObjectOfType<NetworkBuildHUD>();
         if (buildHud != null)
         {
             buildHud.SetMainPlayer(this);
@@ -98,6 +106,7 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
                 // apply rotation
                 firstPersonCamera.localRotation = Quaternion.Euler(rotation.y, 0, 0);
                 transform.localRotation = Quaternion.Euler(0, rotation.x, 0);
+                handCannon.localRotation = Quaternion.Euler(rotation.y, 0, 0);
 
                 // manual player movement
                 Vector2 playerMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * speed * Time.deltaTime;
@@ -112,6 +121,11 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
                     {
                         rb.AddForce(new Vector3(0, jumpForce, 0));
                     }
+                }
+
+                if (!buildHud.buildMode && Input.GetMouseButtonDown(0))
+                {
+                    CmdFire();
                 }
             }
         }
@@ -201,6 +215,8 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
             //Cursor.visible = true;
 
             CmdSetHealth(currentHealth);
+
+            GetComponent<CapsuleCollider>().enabled = false;
         }
         if (healthbar != null)
         {
@@ -213,6 +229,7 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
     {
         // sync health with the server side
         currentHealth = health;
+        GetComponent<CapsuleCollider>().enabled = false;
     }
 
     [Command]
@@ -234,5 +251,14 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
 
         NetworkServer.Spawn(newTower);
         NetworkServer.Destroy(buildNode);
+    }
+
+    [Command]
+    public void CmdFire()
+    {
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        bullet.GetComponent<Rigidbody>().velocity = bulletSpawnPoint.forward * bulletSpeed;
+
+        NetworkServer.Spawn(bullet);
     }
 }

@@ -40,10 +40,12 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     [Header("Bullet")]
     public GameObject bulletPrefab;
-    public Camera playerCam;
+    [SerializeField] private Transform bulletSpawn;
 
     private Vector2 rotation;
     private Rigidbody rb;
+
+    private BuildHUDController buildHUD;
 
     // Start is called before the first frame update
     void Start()
@@ -55,7 +57,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         healthbar.SetHealth(currentHealth);
 
         // see InGameHUDController
-        FindObjectOfType<BuildHUDController>().SetMainPlayer(this);
+        buildHUD = FindObjectOfType<BuildHUDController>();
+        buildHUD.SetMainPlayer(this);
 
         // Load sounds:
         soundScript.LoadSounds(jumpSounds);
@@ -65,7 +68,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
-        
+
         if (Cursor.lockState == CursorLockMode.Locked)
         {
             // when mouse is locked, read mouse movement and rotate the player and camera
@@ -84,27 +87,22 @@ public class PlayerController : MonoBehaviour, IDamageable
             transform.position = transform.position
                 + (transform.right * playerMove.x)
                 + (transform.forward * playerMove.y);
-        }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            // jump
-            if (Physics.CheckSphere(groundCheckPos.position, groundCheckRadius, groundCheckMask))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                rb.AddForce(new Vector3(0, jumpForce, 0));
-                soundScript.PlayRandomSound(jumpSounds);
+                // jump
+                if (Physics.CheckSphere(groundCheckPos.position, groundCheckRadius, groundCheckMask))
+                {
+                    rb.AddForce(new Vector3(0, jumpForce, 0));
+                    soundScript.PlayRandomSound(jumpSounds);
+                }
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null)
-        {
-            SetLockMouse(false);
-            pauseMenu.SetActive(true);
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            GameObject bullet = Instantiate(bulletPrefab, playerCam.transform.position, Quaternion.identity);
-            bullet.transform.position = playerCam.transform.position + playerCam.transform.forward;
-            bullet.transform.forward = bullet.transform.forward;
+            if (!buildHUD.buildMode && Input.GetMouseButtonDown(0))
+            {
+                GameObject bullet = Instantiate(bulletPrefab, firstPersonCamera.transform.position, Quaternion.identity);
+                bullet.transform.position = firstPersonCamera.transform.position + firstPersonCamera.transform.forward;
+                bullet.transform.forward = firstPersonCamera.transform.forward;
+            }
         }
     }
 

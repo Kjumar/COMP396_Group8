@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 2827359063184252515}
   m_Layer: 8
   m_Name: Boximon Fiery Net
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

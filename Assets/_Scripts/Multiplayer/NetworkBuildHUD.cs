@@ -22,7 +22,7 @@ public class NetworkBuildHUD : MonoBehaviour
     [Header("Currency System")]
     [SerializeField] NetworkBankController bankControl;
 
-    private bool buildMode = false;
+    public bool buildMode = false;
     private int selectedTower = 0;
     private NetworkPlayerController userPlayer;
 
