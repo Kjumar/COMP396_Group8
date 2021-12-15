@@ -118,7 +118,11 @@ public class NetBoximonHoard : NetworkBehaviour, IPathable, IDamageable, IAttack
         // since this gets triggered by the animator, I'm differentiating between attacking players and the objective here
         if (playerInRange != null)
         {
-            playerInRange.GetComponent<IDamageable>().TakeDamage(attackPower);
+            IDamageable damageable = playerInRange.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(attackPower);
+            }
         }
         else if (target != null)
         {

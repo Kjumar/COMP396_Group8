@@ -175,6 +175,11 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
             + (transform.right * playerMove.x)
             + (transform.forward * playerMove.y)
             + (transform.up * vertical);
+
+        if (transform.position.y < 5f)
+        {
+            transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
+        }
     }
 
     // locks or unlocks the cursor
@@ -218,6 +223,9 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
         currentHealth -= damage;
         if (currentHealth < 0)
         {
+
+            GetComponent<CapsuleCollider>().enabled = false;
+            rb.isKinematic = true;
             rb.useGravity = false;
             if (ghostMat != null) GetComponent<MeshRenderer>().material = ghostMat;
 
@@ -230,8 +238,6 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
             //Cursor.visible = true;
 
             CmdSetHealth(currentHealth);
-
-            GetComponent<CapsuleCollider>().enabled = false;
         }
         if (healthbar != null)
         {
@@ -245,6 +251,8 @@ public class NetworkPlayerController : NetworkBehaviour, IDamageable
         // sync health with the server side
         currentHealth = health;
         GetComponent<CapsuleCollider>().enabled = false;
+        rb.isKinematic = true;
+        rb.useGravity = false;
     }
 
     [Command]
